@@ -12,3 +12,5 @@ arteplus7 info <URL>                    print video details
 arteplus7 dump <URL> [-o output.mp4]    dump video to stdout or to a file
 
 ```
+
+Note: for the `dump` command to work, you'll have to install `rtmpdump`.
