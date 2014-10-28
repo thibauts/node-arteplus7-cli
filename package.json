@@ -1,0 +1,26 @@
+{
+  "name": "arteplus7-cli",
+  "version": "0.0.1",
+  "description": "arte+7 website CLI",
+  "author": "thibauts",
+  "license": "MIT",
+  "main": "index.js",
+  "dependencies": {
+    "arteplus7": "~0.1.2",
+    "minimist": "~1.1.0"
+  },
+  "bin": {
+    "arteplus7": "bin/arteplus7"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/thibauts/node-arteplus7-cli.git"
+  },
+  "keywords": [
+    "arte",
+    "replay"
+  ]
+}

@@ -1,0 +1,74 @@
+#!/usr/bin/env node
+var arte = require('arteplus7');
+var parse = require('minimist');
+var fs = require('fs');
+
+var argv = process.argv.slice(2);
+var cmd = argv.shift();
+var args = parse(argv);
+
+var lang = args.l || args.language || 'fr';
+
+switch(cmd) {
+  case 'list':
+
+    arte.getVideos(lang, function(err, videos) {
+      if(err) return console.log(err);
+      videos.forEach(function(video) {
+        var cells = [video.title, video.url];
+        console.log(cells.join('\t'));
+      });
+    });
+
+    break;
+  case 'info':
+
+    var url = args._.shift();
+    arte.getVideo(url, function(err, video) {
+      if(err) return console.log(err);
+      var keys = ['title', 'desc', 'genre', 'date', 'image', 'duration'];
+      keys.forEach(function(key) {
+        var cells = [key, video[key]];
+        console.log(cells.join('\t'))
+      });
+    });
+
+    break;
+  case 'dump':
+
+    var url = args._.shift();
+    var output = process.stdout;
+    var filename = args.o || args.output || '-';
+    if(filename !== '-') {
+      var output = fs.createWriteStream(filename);
+    }
+
+    arte.getVideo(url, function(err, video) {
+      if(err) return console.log(err);
+      var streams = video.streams.filter(function(stream) {
+        return stream.type === 'rtmp';
+      });
+      var stream = arte.createStream(streams.shift());
+      stream.pipe(output);
+    });
+
+    break;
+
+  case '--help':
+  case '-h':
+  case undefined:
+    usage();
+    break;
+  default:
+    console.log('Unknown command ' + cmd);
+    usage();
+}
+
+function usage() {
+  console.log('Usage: arteplus7 <command>');
+  console.log('');
+  console.log('arteplus7 list [-l fr|de]               list available videos');
+  console.log('arteplus7 info <URL>                    print video details');
+  console.log('arteplus7 dump <URL> [-o output.mp4]    dump video to stdout or to a file');
+  console.log('');
+}
